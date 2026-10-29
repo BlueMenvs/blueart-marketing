@@ -1,0 +1,832 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLUEART | Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #07111f;
+      color: #f4f8ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .admin-layout {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: #0b1727;
+      border-right: 1px solid #20334a;
+      padding: 28px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .admin-logo {
+      color: #f4f8ff;
+      font-size: 25px;
+      font-weight: 800;
+      text-decoration: none;
+      padding: 0 10px;
+    }
+
+    .admin-logo span { color: #42d9f5; }
+
+    .sidebar-label {
+      color: #8095ad;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      padding: 0 10px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar-nav {
+      display: grid;
+      gap: 7px;
+    }
+
+    .sidebar-nav button,
+    .sidebar-bottom button {
+      width: 100%;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      padding: 13px 12px;
+      color: #b8c7d8;
+      background: transparent;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .sidebar-nav button:hover,
+    .sidebar-nav button.active {
+      color: #42d9f5;
+      background: #10283b;
+      border-color: #1b4056;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      display: grid;
+      gap: 8px;
+    }
+
+    .sidebar-bottom a {
+      display: block;
+      padding: 12px;
+      color: #b8c7d8;
+      text-decoration: none;
+    }
+
+    .sidebar-bottom button:hover,
+    .sidebar-bottom a:hover {
+      color: #42d9f5;
+    }
+
+    .admin-main { min-width: 0; }
+
+    .topbar {
+      min-height: 84px;
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid #20334a;
+      background: #091524;
+    }
+
+    .topbar p {
+      color: #91a5bc;
+      margin: 6px 0 0;
+      font-size: 13px;
+    }
+
+    .admin-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+
+    .section-heading { margin-bottom: 24px; }
+
+    .section-heading h1 {
+      font-size: clamp(26px, 4vw, 36px);
+      margin: 0 0 8px;
+    }
+
+    .section-heading p,
+    .dashboard-card > p {
+      color: #9aabbd;
+      line-height: 1.7;
+    }
+
+    .dashboard-card {
+      padding: 24px;
+      margin-bottom: 22px;
+      background: #0d1b2c;
+      border: 1px solid #20334a;
+      border-radius: 14px;
+    }
+
+    .dashboard-card h2 { margin-top: 0; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      padding: 22px;
+      background: #0d1b2c;
+      border: 1px solid #20334a;
+      border-radius: 14px;
+    }
+
+    .stat-card p {
+      color: #9aabbd;
+      margin: 0 0 12px;
+    }
+
+    .stat-card strong {
+      font-size: 30px;
+      color: #42d9f5;
+    }
+
+    .dashboard-card form {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .dashboard-card form > label {
+      color: #dce8f5;
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .dashboard-card input:not([type="checkbox"]),
+    .dashboard-card select,
+    .dashboard-card textarea {
+      width: 100%;
+      min-width: 0;
+      padding: 13px 14px;
+      color: #f4f8ff;
+      background: #07111f;
+      border: 1px solid #263b52;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    .dashboard-card input:focus,
+    .dashboard-card select:focus,
+    .dashboard-card textarea:focus {
+      outline: 2px solid rgba(66, 217, 245, .25);
+      border-color: #42d9f5;
+    }
+
+    .project-publish-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 400 !important;
+    }
+
+    .project-publish-option input { accent-color: #42d9f5; }
+
+    .dashboard-card button,
+    .primary-button {
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 8px;
+      background: #42d9f5;
+      color: #07111f;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .dashboard-card button:disabled { opacity: .6; }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    #dashboard-message {
+      overflow-wrap: anywhere;
+      margin-top: 16px;
+    }
+
+    #projects-list > div {
+      padding: 16px 0;
+      border-bottom: 1px solid #20334a;
+    }
+
+    #projects-list h3 { color: #42d9f5; }
+    #projects-list p { color: #9aabbd; overflow-wrap: anywhere; }
+
+    @media (max-width: 800px) {
+      .admin-layout { grid-template-columns: 1fr; }
+
+      .sidebar {
+        padding: 18px;
+        gap: 18px;
+        border-right: 0;
+        border-bottom: 1px solid #20334a;
+      }
+
+      .sidebar-nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sidebar-bottom {
+        margin-top: 0;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .topbar { padding: 18px; }
+      .admin-content { padding: 20px 16px; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    
+/* BLUEART — Premium Booking Cards */
+
+
+/* BLUEART MARKETING — Executive Booking Management */
+
+#bookings-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  margin-top: 26px;
+}
+
+#bookings-list > div {
+  position: relative;
+  min-width: 0;
+  padding: 26px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(66, 217, 245, 0.08),
+      transparent 42%
+    ),
+    linear-gradient(145deg, #101f32 0%, #0b1626 100%);
+  border: 1px solid #26394e;
+  border-radius: 18px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.18);
+  transition: border-color 0.25s, box-shadow 0.25s,
+    transform 0.25s;
+}
+
+#bookings-list > div::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #42d9f5,
+    transparent
+  );
+  opacity: 0.65;
+}
+
+#bookings-list > div:hover {
+  transform: translateY(-3px);
+  border-color: rgba(66, 217, 245, 0.45);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+}
+
+#bookings-list h3 {
+  margin: 4px 0 20px;
+  padding-bottom: 17px;
+  color: #f1f7ff;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  border-bottom: 1px solid #26394e;
+  overflow-wrap: anywhere;
+}
+
+#bookings-list p {
+  color: #b1c0d1;
+  font-size: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+#bookings-list p:nth-of-type(2) {
+  display: inline-flex;
+  padding: 6px 12px;
+  color: #75e7fa;
+  background: rgba(66, 217, 245, 0.08);
+  border: 1px solid rgba(66, 217, 245, 0.18);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+#bookings-list select {
+  width: 100%;
+  margin-top: 12px;
+  padding: 13px 14px;
+  color: #eef5ff;
+  background: #071321;
+  border: 1px solid #30445b;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+}
+
+#bookings-list select:focus {
+  border-color: #42d9f5;
+  box-shadow: 0 0 0 3px rgba(66, 217, 245, 0.1);
+}
+
+#bookings-list button {
+  width: 100%;
+  margin: 12px 0 0;
+  padding: 13px 18px;
+  color: #07111f;
+  background: linear-gradient(100deg, #42d9f5, #9aeafa);
+  border: 0;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: filter 0.2s, transform 0.2s;
+}
+
+#bookings-list button:hover:not(:disabled) {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+#bookings-list button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+@media (max-width: 900px) {
+  #bookings-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  #bookings-list > div {
+    padding: 21px 18px;
+    border-radius: 14px;
+  }
+
+  #bookings-list h3 {
+    font-size: 19px;
+  }
+}
+
+
+/* Booking card spacing and controls fix */
+
+#bookings-list > div {
+  padding: 28px !important;
+  overflow: visible;
+}
+
+#bookings-list h3 {
+  margin-bottom: 24px !important;
+  padding-bottom: 18px !important;
+  line-height: 1.4;
+}
+
+#bookings-list p {
+  margin: 0 0 12px !important;
+  line-height: 1.8 !important;
+  overflow-wrap: anywhere;
+}
+
+/* Status label */
+#bookings-list p:nth-of-type(2) {
+  display: inline-block !important;
+  margin: 14px 0 18px !important;
+  padding: 8px 12px !important;
+}
+
+/* Dropdown and update button layout */
+#bookings-list select {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  margin: 0 0 14px !important;
+  padding: 12px 14px !important;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+/* Prevent button from being cut off */
+#bookings-list button {
+  display: block;
+  width: 100%;
+  min-height: 46px;
+  margin: 0 !important;
+  padding: 13px 16px !important;
+  white-space: normal;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+/* Keep cards comfortable on mobile */
+@media (max-width: 600px) {
+  #bookings-list > div {
+    padding: 20px 16px !important;
+  }
+}
+
+
+/* BLUEART — Booking Search & Filters */
+
+.booking-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  gap: 14px;
+  margin: 22px 0 26px;
+}
+
+.booking-filters input,
+.booking-filters select {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 13px 15px;
+  color: #f1f7ff;
+  background: #091524;
+  border: 1px solid #2a3d53;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.booking-filters input::placeholder {
+  color: #8193a8;
+}
+
+.booking-filters input:focus,
+.booking-filters select:focus {
+  border-color: #42d9f5;
+  box-shadow: 0 0 0 3px rgba(66, 217, 245, 0.1);
+}
+
+.booking-filters select {
+  color-scheme: dark;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .booking-filters {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar">
+      <a href="admin-dashboard.html" class="admin-logo">
+        BLUEART<span>.</span>
+      </a>
+
+
+<div>
+  <p class="sidebar-label">WORKSPACE</p>
+  <nav class="sidebar-nav" aria-label="Admin navigation">
+    <button type="button" class="active" data-section="overview">▦ Overview</button>
+    <button type="button" data-section="add-project">＋ Add Project</button>
+    <button type="button" data-section="all-projects">▤ All Projects</button>
+    <button type="button" data-section="categories">📁 Categories</button>
+    <button type="button" data-section="subcategories">📂 Subcategories</button>
+    <button type="button" data-section="clients">👥 Clients</button>
+    <button type="button" data-section="bookings">📅 Bookings</button>
+    <button type="button" data-section="settings">⚙ Settings</button>
+  </nav>
+</div>
+
+
+      <div class="sidebar-bottom">
+        <a href="index.html">↗ View Website</a>
+        <button id="logout-button" type="button">↪ Sign Out</button>
+      </div>
+    </aside>
+
+    <div class="admin-main">
+      <header class="topbar">
+        <div>
+          <strong id="topbar-title">Dashboard Overview</strong>
+          <p>Manage your creative portfolio</p>
+        </div>
+        <span style="color:#42d9f5;font-size:13px">● Admin Workspace</span>
+      </header>
+
+      <main class="admin-content">
+        <section id="overview" class="admin-section active">
+          <div class="section-heading">
+            <h1>Welcome to BLUEART.</h1>
+            <p>Your creative business, organized in one place.</p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <p>Total Projects</p>
+              <strong id="total-projects">—</strong>
+            </div>
+            <div class="stat-card">
+              <p>Published Projects</p>
+              <strong id="published-projects">—</strong>
+            </div>
+            <div class="stat-card">
+              <p>Draft Projects</p>
+              <strong id="draft-projects">—</strong>
+            </div>
+          </div>
+
+          <div class="dashboard-card">
+            <h2>Quick Actions</h2>
+            <p>Choose what you want to do next.</p>
+            <div class="quick-actions">
+              <button type="button" data-section="add-project">＋ Add New Project</button>
+              <button type="button" data-section="all-projects">View All Projects</button>
+            </div>
+            <p id="dashboard-message">Checking your admin session...</p>
+          </div>
+        </section>
+
+        
+<!-- Categories Section -->
+<section id="categories" class="admin-section">
+  <div class="section-heading">
+    <h1>Manage Categories</h1>
+    <p>Create and organize your main portfolio categories.</p>
+  </div>
+
+  <div class="dashboard-card">
+    <h2>Add Main Category</h2>
+    <form id="category-form">
+      <label for="category-name">Category Name</label>
+      <input
+        type="text"
+        id="category-name"
+        placeholder="e.g. Graphic Design"
+        required
+      />
+      <button type="submit">＋ Add Category</button>
+    </form>
+    <p id="category-message" role="status"></p>
+  </div>
+
+  <div class="dashboard-card">
+    <h2>Existing Categories</h2>
+    <div id="category-list">
+      <p>Categories will appear here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Subcategories Section -->
+<section id="subcategories" class="admin-section">
+  <div class="section-heading">
+    <h1>Manage Subcategories</h1>
+    <p>Organize projects under each main category.</p>
+  </div>
+
+  <div class="dashboard-card">
+    <h2>Add Subcategory</h2>
+    <form id="subcategory-form">
+      <label for="subcategory-category">Main Category</label>
+      <select id="subcategory-category" required>
+        <option value="">Select a category</option>
+      </select>
+
+      <label for="subcategory-name">Subcategory Name</label>
+      <input
+        type="text"
+        id="subcategory-name"
+        placeholder="e.g. Logo Design"
+        required
+      />
+      <button type="submit">＋ Add Subcategory</button>
+    </form>
+    <p id="subcategory-message" role="status"></p>
+  </div>
+
+  <div class="dashboard-card">
+    <h2>Existing Subcategories</h2>
+    <div id="subcategory-list">
+      <p>Subcategories will appear here.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Clients Section -->
+<section id="clients" class="admin-section">
+  <div class="section-heading">
+    <h1>Manage Clients</h1>
+    <p>Group related projects by client.</p>
+  </div>
+
+  <div class="dashboard-card">
+    <h2>Add Client</h2>
+    <form id="client-form">
+      <label for="client-name">Client or Project Group Name</label>
+      <input
+        type="text"
+        id="client-name"
+        placeholder="e.g. Client A"
+        required
+      />
+
+      <label>
+        <input type="checkbox" id="client-public" />
+        Display this client name publicly
+      </label>
+
+      <button type="submit">＋ Add Client</button>
+    </form>
+    <p id="client-message" role="status"></p>
+  </div>
+
+  <div class="dashboard-card">
+    <h2>Existing Clients</h2>
+    <div id="client-list">
+      <p>Clients will appear here.</p>
+    </div>
+  </div>
+</section>
+
+
+        <section id="add-project" class="admin-section">
+          <div class="section-heading">
+            <h1>Add New Project</h1>
+            <p>Add your latest work to your portfolio.</p>
+          </div>
+
+          <div class="dashboard-card">
+            <h2>Project Details</h2>
+            <form id="project-form">
+              <label for="project-title">Project Title</label>
+              <input id="project-title" type="text" placeholder="Enter project title" required>
+
+             
+<label for="project-category">Category</label>
+<select id="project-category" required>
+  <option value="">Choose a category</option>
+</select>
+
+<label for="project-subcategory">Subcategory</label>
+<select id="project-subcategory">
+  <option value="">No subcategory</option>
+</select>
+
+<label for="project-client">Client / Project Group</label>
+<select id="project-client">
+  <option value="">No client assigned</option>
+</select>
+
+
+              <label for="project-description">Description</label>
+              <textarea id="project-description" rows="4" placeholder="Describe your project"></textarea>
+
+              <label for="project-media-url">Media URL</label>
+              <input id="project-media-url" type="url" placeholder="Paste an accessible media URL" required>
+
+              <label for="project-media-type">Media Type</label>
+              <select id="project-media-type" required>
+                <option value="image">Image</option>
+                <option value="video">Video</option>
+              </select>
+
+              <label class="project-publish-option">
+                <input id="project-published" type="checkbox">
+                Publish this project on the website
+              </label>
+
+              <button type="submit" id="save-project-button">Save Project</button>
+            </form>
+          </div>
+        </section>
+
+        <section id="all-projects" class="admin-section">
+          <div class="section-heading">
+            <h1>All Projects</h1>
+            <p>Review your saved portfolio projects.</p>
+          </div>
+
+          <div class="dashboard-card">
+            <div id="projects-list">Loading projects...</div>
+          </div>
+        </section>
+
+<!-- Bookings Section -->
+<section id="bookings" class="admin-section">
+  <div class="section-heading">
+    <h1>Manage Bookings</h1>
+    <p>Review and manage customer booking requests.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <p>Pending Bookings</p>
+      <strong id="pending-bookings-count">—</strong>
+    </div>
+
+    <div class="stat-card">
+      <p>Confirmed Bookings</p>
+      <strong id="confirmed-bookings-count">—</strong>
+    </div>
+
+    <div class="stat-card">
+      <p>Total Bookings</p>
+      <strong id="total-bookings-count">—</strong>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <h2>Customer Requests</h2>
+    
+<div class="booking-filters">
+  <input
+    type="search"
+    id="booking-search"
+    placeholder="Search name, email or phone..."
+    aria-label="Search bookings"
+  />
+
+  <select id="booking-status-filter" aria-label="Filter bookings by status">
+    <option value="all">All Bookings</option>
+    <option value="pending">Pending</option>
+    <option value="confirmed">Confirmed</option>
+    <option value="completed">Completed</option>
+    <option value="cancelled">Cancelled</option>
+  </select>
+</div>
+
+    <p id="bookings-message" role="status">
+      Loading bookings...
+    </p>
+    <div id="bookings-list"></div>
+  </div>
+</section>
+
+        <section id="settings" class="admin-section">
+          <div class="section-heading">
+            <h1>Settings</h1>
+            <p>Admin account and website shortcuts.</p>
+          </div>
+
+          <div class="dashboard-card">
+            <h2>Website</h2>
+            <p>Open the public BLUEART MARKETING website to review your portfolio.</p>
+            <a href="index.html" style="color:#42d9f5">Open Website ↗</a>
+          </div>
+
+          <div class="dashboard-card">
+            <h2>Admin Account</h2>
+            <p>Use Sign Out to end your current admin session.</p>
+            <button type="button" id="settings-logout-button">Sign Out</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script type="module" src="dashboard.js"></script>
+</body>
+</html>

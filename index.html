@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BLUEART MARKETING — Photography, video editing, photo editing and graphic design.">
+  <title>BLUEART MARKETING | Creative Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <a href="#" class="logo">BLUEART<span>.</span></a>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <p class="eyebrow">CREATIVE STUDIO · VISUAL STORYTELLING</p>
+      <h1>We turn your ideas into <span>visual stories.</span></h1>
+      <p class="intro">
+        Photography, video editing and creative design
+        made to bring your vision to life.
+      </p>
+      <a class="button" href="#portfolio">Explore Our Work ↗</a>
+    </section>
+
+    <section class="services" id="services">
+      <p class="eyebrow">WHAT WE DO</p>
+      <h2>Creative services for your vision.</h2>
+      <div class="service-grid">
+        <article class="service-card">
+          <span>01</span>
+          <h3>Photography</h3>
+          <p>Capturing meaningful moments and stories.</p>
+        </article>
+        <article class="service-card">
+          <span>02</span>
+          <h3>Video Editing</h3>
+          <p>Crafting engaging videos with rhythm and emotion.</p>
+        </article>
+        <article class="service-card">
+          <span>03</span>
+          <h3>Photo Editing</h3>
+          <p>Refined edits and natural-looking retouching.</p>
+        </article>
+        <article class="service-card">
+          <span>04</span>
+          <h3>Album Design</h3>
+          <p>Beautiful layouts for your precious memories.</p>
+        </article>
+        <article class="service-card">
+          <span>05</span>
+          <h3>Graphic Design</h3>
+          <p>Logos and visuals with a clear identity.</p>
+        </article>
+      </div>
+    </section>
+
+
+
+<section class="portfolio" id="portfolio">
+  <p class="eyebrow">SELECTED WORK</p>
+  <h2>Creativity in every frame.</h2>
+  <p>Explore our latest photography, videos and creative designs.</p>
+
+  <!-- Main Category Filters -->
+  <div
+    id="portfolio-category-filters"
+    class="portfolio-category-filters"
+    aria-label="Filter projects by category"
+  >
+    <button type="button" class="portfolio-filter active" data-category="all">
+      All Projects
+    </button>
+  </div>
+
+  <!-- Subcategory Filters -->
+  <div
+    id="portfolio-subcategory-filters"
+    class="portfolio-subcategory-filters"
+    aria-label="Filter projects by subcategory"
+    hidden
+  ></div>
+
+  <!-- Portfolio Projects -->
+  <div id="portfolio-grid" class="portfolio-grid">
+    <p>Loading our creative work...</p>
+  </div>
+</section>
+
+
+
+   
+<section class="contact" id="contact">
+  <p class="eyebrow">HAVE A PROJECT IN MIND?</p>
+  <h2>Let's create something meaningful.</h2>
+  <p>Tell us about your project and send a booking request.</p>
+
+  <form id="booking-form" class="booking-form">
+    <label for="customer-name">Full Name</label>
+    <input
+      type="text"
+      id="customer-name"
+      name="customer_name"
+      placeholder="Your full name"
+      required
+    />
+
+    <label for="customer-email">Email Address</label>
+    <input
+      type="email"
+      id="customer-email"
+      name="customer_email"
+      placeholder="you@example.com"
+      required
+    />
+
+    <label for="customer-phone">Phone / WhatsApp</label>
+    <input
+      type="tel"
+      id="customer-phone"
+      name="customer_phone"
+      placeholder="Your contact number"
+    />
+
+    <label for="booking-service">Select a Service</label>
+    <select id="booking-service" name="service" required>
+      <option value="">Choose a service</option>
+      <option value="Photography">Photography</option>
+      <option value="Video Editing">Video Editing</option>
+      <option value="Photo Editing">Photo Editing</option>
+      <option value="Album Design">Album Design</option>
+      <option value="Graphic Design">Graphic Design</option>
+    </select>
+
+    <label for="booking-date">Preferred Date</label>
+    <input type="date" id="booking-date" name="booking_date" />
+
+    <label for="booking-message">Project Details</label>
+    <textarea
+      id="booking-message"
+      name="message"
+      rows="4"
+      placeholder="Describe your project..."
+    ></textarea>
+
+    <button type="submit" class="button">Send Booking Request</button>
+    <p id="booking-message-status" role="status" aria-live="polite"></p>
+  </form>
+
+  <!-- Keep your existing WhatsApp link here -->
+  <a
+    class="button"
+    href="https://wa.me/94757733146"
+    target="_blank"
+    rel="noopener"
+  >
+    Contact on WhatsApp ↗
+  </a>
+</section>
+
+  </main>
+
+  <footer>
+    <a href="#home" class="logo">BLUEART<span>.</span></a>
+    <p>© <span id="year"></span> BLUEART MARKETING. All rights reserved.</p>
+  </footer>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

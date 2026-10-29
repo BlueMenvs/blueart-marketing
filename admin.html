@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLUEART Admin Login</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-login {
+      max-width: 440px;
+      margin: 90px auto;
+      padding: 32px;
+      background: #0d1b2c;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+    }
+
+    .admin-login h1 {
+      margin-bottom: 8px;
+    }
+
+    .admin-login p {
+      color: #9aabbd;
+      margin-bottom: 24px;
+    }
+
+    .admin-login label {
+      display: block;
+      margin: 16px 0 6px;
+    }
+
+    .admin-login input {
+      width: 100%;
+      padding: 13px;
+      color: #f4f8fc;
+      background: #07111f;
+      border: 1px solid #34465b;
+      border-radius: 5px;
+    }
+
+    .admin-login button {
+      width: 100%;
+      margin-top: 22px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    #login-message {
+      margin-top: 16px;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="index.html" class="logo">BLUEART<span>.</span></a>
+    <a href="index.html">← Back to website</a>
+  </header>
+
+  <main class="admin-login">
+    <p class="eyebrow">PRIVATE ACCESS</p>
+    <h1>Admin Login</h1>
+    <p>Sign in to manage your portfolio projects.</p>
+
+    <form id="login-form">
+      <label for="email">Admin email</label>
+      <input id="email" type="email" autocomplete="username" required>
+
+      <label for="password">Password</label>
+      <input id="password" type="password"
+        autocomplete="current-password" required>
+
+      <button class="button" type="submit">Sign In</button>
+      <p id="login-message" role="status"></p>
+    </form>
+  </main>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
